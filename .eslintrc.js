@@ -31,5 +31,10 @@ module.exports = {
               'extensions': ['.js', '.jsx']
             }
         ]
+    },
+    'settings': {
+        'react': {
+            'version': 'detect'
+        }
     }
 };
