@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "^6.2.0",
     "cra-template": "1.1.2",
+    "http-proxy-middleware": "^2.0.1",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-countdown": "^2.3.2",
