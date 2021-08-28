@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Card from '../components/cards/card';
+import CryptoPriceTracker from '../components/coins/crypto-price-tracker.js';
 
 const Farm = () => {
   const [saplings, setSaplings] = useState(0);
@@ -10,7 +11,7 @@ const Farm = () => {
 
         <div className="mt-4">
           <div className="flex flex-wrap">
-            <Card metric={saplings} text="🌼 Mama" />
+            <CryptoPriceTracker coin="PVU" />
             <Card metric={saplings} text="🌻 Saplings" />
             <Card metric={saplings} text="☀️ LE" />
             <Card metric={saplings} text="🍀 PVU" />
