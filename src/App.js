@@ -1,12 +1,34 @@
 import React from 'react';
-import Dashboard from './screens/dashboard';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Sidebar from './components/sidebar.js';
+import Header from './components/header.js';
+import Farm from './screens/farm.js';
+import Harvest from './screens/harvest.js';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <Dashboard />
+      <div>
+        <div className="flex h-screen bg-gray-200">
+          <div className="block fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
+          <BrowserRouter>
+            <Sidebar />
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <Header />
+              <Switch>
+                <Route path="/farm">
+                  <Farm />
+                </Route>
+                <Route path="/harvest">
+                  <Harvest />
+                </Route>
+              </Switch>
+            </div>
+          </BrowserRouter>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
