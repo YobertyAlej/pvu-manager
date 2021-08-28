@@ -5,9 +5,10 @@ import Header from './components/header.js';
 import Login from './screens/login.js';
 import Farm from './screens/farm.js';
 import Harvest from './screens/harvest.js';
+import useToken from './hooks/useToken.js';
 
 const App = () => {
-  const [token, setToken] = useState();
+  const { token, setToken } = useToken();
 
   if (!token) {
     return <Login setToken={setToken} />;

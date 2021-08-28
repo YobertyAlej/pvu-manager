@@ -1,29 +1,42 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const loginUser = async (credentials) => {
-  return fetch('http://localhost:8000/api/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials),
-  })
-    .then((data) => data.json())
-    .catch((error) => console.log(error));
-};
-
 const Login = ({ setToken }) => {
-  const [username, setUserName] = useState();
+  const [email, setEmailName] = useState();
+  const [errors, setErrors] = useState();
   const [password, setPassword] = useState();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = await loginUser({
-      username,
-      password,
+  const loginUser = async (credentials) => {
+    return fetch('http://127.0.0.1:8000/api/login', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
     });
-    setToken(token);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    loginUser({
+      email,
+      password,
+    })
+      .then((data) => handleSuccess(data))
+      .catch((error) => setErrors(error));
+  };
+
+  const handleSuccess = async (data) => {
+    if (data.status == 422) {
+      setErrors(data.statusText);
+      return;
+    }
+
+    if (data.ok) {
+      const parsed = await data.json();
+      setToken(parsed);
+    }
   };
 
   return (
@@ -48,7 +61,7 @@ const Login = ({ setToken }) => {
                   Email Address
                 </label>
                 <input
-                  onChange={(e) => setUserName(e.target.value)}
+                  onChange={(e) => setEmailName(e.target.value)}
                   type="email"
                   name="email"
                   id="email"
