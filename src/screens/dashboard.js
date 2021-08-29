@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Card from '../components/cards/card';
 import CryptoPriceTracker from '../components/coins/crypto-price-tracker.js';
 
-const Farm = () => {
+const Dashboard = () => {
   const [saplings, setSaplings] = useState(0);
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
@@ -26,4 +26,4 @@ const Farm = () => {
   );
 };
 
-export default Farm;
+export default Dashboard;

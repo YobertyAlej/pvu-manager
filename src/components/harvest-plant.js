@@ -6,7 +6,7 @@ import moment from 'moment';
 const HarvestPlant = ({ sow }) => {
   const [harvest, setHarvest] = useState(false);
   const getPlantName = () => sow.plant.name;
-  const getPlantIcon = () => sow.image;
+  const getPlantIcon = () => sow.plant.image;
 
   useEffect(() => {
     const today = moment();
@@ -55,7 +55,7 @@ const HarvestPlant = ({ sow }) => {
         />
       </td>
       <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
-        <a href="#" className="text-indigo-600 hover:text-indigo-900">
+        <a href={sow.url} className="text-indigo-600 hover:text-indigo-900">
           Open in PVU
         </a>
       </td>

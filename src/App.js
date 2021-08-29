@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from './components/sidebar.js';
 import Header from './components/header.js';
 import Login from './screens/login.js';
-import Farm from './screens/farm.js';
+import Dashboard from './screens/dashboard.js';
+import CreatePlant from './screens/plant/create.js';
 import Harvest from './screens/harvest.js';
 import useToken from './hooks/useToken.js';
 
@@ -24,8 +25,11 @@ const App = () => {
             <div className="flex-1 flex flex-col overflow-hidden">
               <Header />
               <Switch>
-                <Route path="/farm">
-                  <Farm />
+                <Route path="/charts">
+                  <Dashboard />
+                </Route>
+                <Route path="/plant/new">
+                  <CreatePlant />
                 </Route>
                 <Route path="/harvest">
                   <Harvest />
