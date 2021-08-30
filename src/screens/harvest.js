@@ -11,7 +11,7 @@ const Harvest = () => {
   const { token } = useToken();
 
   const getData = async () => {
-    return fetch('http://127.0.0.1:8000/api/sows?page=' + page, {
+    return fetch('http://pvu-api.test/api/sows?page=' + page, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

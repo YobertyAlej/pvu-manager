@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Sidebar from './components/sidebar.js';
-import Header from './components/header.js';
+import Sidebar from './components/sidebar/dark-mode.js';
+import Header from './components/topbar/dark-mode';
 import Login from './screens/login.js';
 import Dashboard from './screens/dashboard.js';
 import CreatePlant from './screens/plant/create.js';
@@ -26,10 +26,10 @@ const App = () => {
             <div className="flex-1 flex flex-col overflow-hidden">
               <Header />
               <Switch>
-                <Route path="/charts">
+                <Route path="/dashboard">
                   <Dashboard />
                 </Route>
-                <Route path="/plant/new">
+                <Route path="/plants">
                   <CreatePlant />
                 </Route>
                 <Route path="/harvest">
