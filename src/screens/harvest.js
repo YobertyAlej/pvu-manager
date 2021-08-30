@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import HarvestPlant from '../components/harvest-plant.js';
+import { NavLink } from 'react-router-dom';
 import useToken from '../hooks/useToken.js';
 
 const Harvest = () => {
@@ -56,20 +57,26 @@ const Harvest = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="flex justify-between">
           <h3 className="text-gray-700 text-3xl font-medium">Harvest</h3>
-          <button className="bg-white text-gray-800 font-bold rounded border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-4 inline-flex items-center">
-            <span className="mr-2">Add plant</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentcolor"
-                d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"
-              />
-            </svg>
-          </button>
+          <NavLink
+            to="/sow/new"
+            className="flex items-center py-2 px-6 bg-opacity-25 text-gray-100"
+            activeClassName="flex items-center py-2 px-6 bg-gray-700 bg-opacity-25 text-gray-100"
+          >
+            <button className="bg-white text-gray-800 font-bold rounded border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-4 inline-flex items-center">
+              <span className="mr-2">Add plant</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentcolor"
+                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"
+                />
+              </svg>
+            </button>
+          </NavLink>
         </div>
 
         <div className="flex flex-col mt-8">

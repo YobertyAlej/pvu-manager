@@ -1,15 +1,56 @@
 import React, { useState } from 'react';
 import FilePicker from '../../components/fileuploaders/file-picker';
+import useToken from '../../hooks/useToken.js';
 
 const Create = () => {
+  const [errors, setErrors] = useState();
   const [name, setName] = useState('');
+  const [image, setImage] = useState(null);
+  const [le, setLE] = useState('');
+  const [time, setTime] = useState('');
+  const [permanent, setPermanent] = useState(true);
+  const [price, setPrice] = useState('');
+
+  const { token } = useToken();
+
+  const submit = async () => {
+    const form = {
+      name,
+      photo: image,
+      le,
+      time_in_hours: time,
+      permanent,
+      price,
+    };
+    return fetch('http://127.0.0.1:8000/api/plants', {
+      method: 'POST',
+      body: JSON.stringify(form),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    }).then((data) => handleSuccess(data));
+  };
+
+  const handleSuccess = async (data) => {
+    if (data.status == 422) {
+      setErrors(data.statusText);
+      return;
+    }
+    if (data.ok) {
+      console.log('success!');
+      alert('success!');
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center bg-center bg-gray-50 items-center overflow-auto">
+    <div className="flex mt-20 items-center justify-center bg-center bg-gray-50 items-center overflow-auto">
       <div className="w-full px-10 py-10 bg-white rounded-xl shadow-lg">
         <div className="grid  gap-8 grid-cols-1">
           <div className="flex flex-col">
             <div className="flex flex-col sm:flex-row items-center">
-              <h1 className="font-bold text-xl mr-auto">Plant</h1>
+              <h1 className="font-bold text-xl mr-auto">Create New Plant ☘️</h1>
             </div>
             <div className="mt-4">
               <div className="form">
@@ -23,7 +64,6 @@ const Create = () => {
                       className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
                       required="required"
                       type="text"
-                      id="integration_shop_name"
                       onChange={(e) => setName(e.target.value)}
                     />
                     <p className="text-red-500 text-xs hidden">
@@ -32,110 +72,107 @@ const Create = () => {
                   </div>
                   <div className="mb-3 space-y-2 w-full text-xs">
                     <label className="font-semibold text-gray-600 py-2">
-                      Company Mail <span title="required">*</span>
+                      Harvest LE <span title="required">*</span>
                     </label>
                     <input
-                      placeholder="Email ID"
+                      placeholder="Harvest LE"
                       className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
                       required="required"
-                      type="text"
-                      name="integration[shop_name]"
-                      id="integration_shop_name"
+                      type="number"
+                      onChange={(e) => setLE(e.target.value)}
+                    />
+                    <p className="text-red-500 text-xs hidden">
+                      Please fill out this field.
+                    </p>
+                  </div>
+                  <div className="mb-3 space-y-2 w-full text-xs">
+                    <label className="font-semibold text-gray-600 py-2">
+                      Time <span title="required">*</span>
+                    </label>
+                    <input
+                      placeholder="Time"
+                      className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
+                      required="required"
+                      type="number"
+                      onChange={(e) => setTime(e.target.value)}
                     />
                     <p className="text-red-500 text-xs hidden">
                       Please fill out this field.
                     </p>
                   </div>
                 </div>
-                <div className="mb-3 space-y-2 w-full text-xs">
-                  <label className=" font-semibold text-gray-600 py-2">
-                    Company Website
-                  </label>
-                  <div className="flex flex-wrap items-stretch w-full mb-4 relative">
-                    <div className="flex">
-                      <span className="flex items-center leading-normal bg-grey-lighter border-1 rounded-r-none border border-r-0 border-blue-300 px-3 whitespace-no-wrap text-grey-dark text-sm w-12 h-10 bg-blue-300 justify-center items-center  text-xl rounded-lg text-white">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          ></path>
-                        </svg>
-                      </span>
-                    </div>
-                    <input
-                      type="text"
-                      className="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border border-l-0 h-10 border-grey-light rounded-lg rounded-l-none px-3 relative focus:border-blue focus:shadow"
-                      placeholder="https://"
-                    />
-                  </div>
-                </div>
-                <div className="md:flex md:flex-row md:space-x-4 w-full text-xs">
-                  <div className="w-full flex flex-col mb-3">
+                <div className="md:flex flex-row md:space-x-4 w-full text-xs">
+                  <div className="mb-3 space-y-2 w-full text-xs">
                     <label className="font-semibold text-gray-600 py-2">
-                      Company Address
+                      Price <span title="required">*</span>
                     </label>
                     <input
-                      placeholder="Address"
+                      placeholder="Price"
                       className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4"
-                      type="text"
-                      name="integration[street_address]"
-                      id="integration_street_address"
+                      required="required"
+                      type="number"
+                      onChange={(e) => setPrice(e.target.value)}
                     />
+                    <p className="text-red-500 text-xs hidden">
+                      Please fill out this field.
+                    </p>
                   </div>
+
+                  <div className="mb-3 space-y-2 w-full text-xs">
+                    <label className="font-semibold text-gray-600 py-2">
+                      Upload image<span title="required">*</span>
+                    </label>
+                    <FilePicker handler={setImage} />
+                  </div>
+
                   <div className="w-full flex flex-col mb-3">
                     <label className="font-semibold text-gray-600 py-2">
-                      Location<span title="required">*</span>
+                      Permanent<span title="required">*</span>
                     </label>
-                    <select
-                      className="block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg h-10 px-4 md:w-full "
-                      required="required"
-                      name="integration[city_id]"
-                      id="integration_city_id"
-                    >
-                      <option value="">Seleted location</option>
-                      <option value="">Cochin,KL</option>
-                      <option value="">Mumbai,MH</option>
-                      <option value="">Bangalore,KA</option>
-                    </select>
+
+                    <input
+                      type="checkbox"
+                      className="form-checkbox"
+                      checked={permanent}
+                      onChange={(e) => setPermanent(!permanent)}
+                    />
+
                     <p className="text-sm text-red-500 hidden mt-3" id="error">
                       Please fill out this field.
                     </p>
                   </div>
                 </div>
-                <div className="flex-auto w-full mb-1 text-xs space-y-2">
-                  <label className="font-semibold text-gray-600 py-2">
-                    Description
-                  </label>
-                  <textarea
-                    required=""
-                    name="message"
-                    id=""
-                    className="w-full min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4"
-                    placeholder="Enter your comapny info"
-                    spellCheck="false"
-                  ></textarea>
-                  <p className="text-xs text-gray-400 text-left my-3">
-                    You inserted 0 characters
-                  </p>
-                </div>
-                <p className="text-xs text-red-500 text-right my-3">
+                {false && (
+                  <div className="flex-auto w-full mb-1 text-xs space-y-2">
+                    <label className="font-semibold text-gray-600 py-2">
+                      Description
+                    </label>
+                    <textarea
+                      required=""
+                      name="message"
+                      id=""
+                      className="w-full min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4"
+                      placeholder="Enter your comapny info"
+                      spellCheck="false"
+                    ></textarea>
+                    <p className="text-xs text-gray-400 text-left my-3">
+                      You inserted 0 characters
+                    </p>
+                  </div>
+                )}
+                <p className="text-xs text-red-500 text-center my-3">
                   Required fields are marked with an asterisk{' '}
                   <span title="Required field">*</span>
                 </p>
-                <div className="mt-5 text-right md:space-x-3 md:block flex flex-col-reverse">
+                <div className="mt-5 text-center md:space-x-3 md:block flex flex-col-reverse">
                   <button className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
                     {' '}
                     Cancel{' '}
                   </button>
-                  <button className="mb-2 md:mb-0 bg-green-400 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500">
+                  <button
+                    onClick={submit}
+                    className="mb-2 md:mb-0 bg-green-400 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-500"
+                  >
                     Save
                   </button>
                 </div>

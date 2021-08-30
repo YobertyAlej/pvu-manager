@@ -7,6 +7,7 @@ import Dashboard from './screens/dashboard.js';
 import CreatePlant from './screens/plant/create.js';
 import Harvest from './screens/harvest.js';
 import useToken from './hooks/useToken.js';
+import CreateSow from './screens/sows/create.js';
 
 const App = () => {
   const { token, setToken } = useToken();
@@ -33,6 +34,9 @@ const App = () => {
                 </Route>
                 <Route path="/harvest">
                   <Harvest />
+                </Route>
+                <Route path="/sow/new">
+                  <CreateSow />
                 </Route>
               </Switch>
             </div>
