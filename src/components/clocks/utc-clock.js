@@ -15,7 +15,12 @@ const UTCClock = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return <span>UTC Time: {`${utc.format('hh:mm:ss')}`}</span>;
+  return (
+    <span>
+      <span className="hidden sm:inline-block">UTC</span>{' '}
+      {`${utc.format('hh:mm:ss')}`}
+    </span>
+  );
 };
 
 export default UTCClock;

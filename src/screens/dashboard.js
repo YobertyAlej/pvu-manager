@@ -5,7 +5,7 @@ import CryptoPriceTracker from '../components/coins/crypto-price-tracker.js';
 const Dashboard = () => {
   const [saplings, setSaplings] = useState(0);
   return (
-    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+    <main className="flex-1 overflow-x-hidden overflow-y-auto h-full bg-gray-200">
       <div className="container mx-auto px-6 py-8">
         <h3 className="text-gray-700 text-3xl font-medium">Farm</h3>
 

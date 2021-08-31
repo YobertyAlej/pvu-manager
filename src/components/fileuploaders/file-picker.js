@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const FilePicker = ({ handler }) => {
   return (
-    <label className="w-100 flex flex-col items-center px-4 py-2 bg-green-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:text-white">
+    <label className="flex flex-col items-center px-4 py-2 bg-blue-500 rounded-lg shadow-lg tracking-wide uppercase cursor-pointer text-white hover:text-gray-800">
       <svg
         className="w-8 h-6"
         fill="currentColor"

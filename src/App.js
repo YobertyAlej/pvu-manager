@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Sidebar from './components/sidebar/dark-mode.js';
 import Header from './components/topbar/dark-mode';
@@ -10,6 +10,7 @@ import useToken from './hooks/useToken.js';
 import CreateSow from './screens/sows/create.js';
 
 const App = () => {
+  const [show, setSidebar] = useState(true);
   const { token, setToken } = useToken();
 
   if (!token) {
@@ -17,14 +18,42 @@ const App = () => {
   }
 
   return (
+    <div className="App flex flex-row">
+      <BrowserRouter>
+        <div className="flex h-screen">
+          <Sidebar />
+        </div>
+        <div className="w-screen overflow-hidden">
+          <Header />
+          <div className="h-full w-full rounded-xl shadow-lg bg-gray-200 overflow-auto">
+            <Switch>
+              <Route path="/dashboard">
+                <Dashboard />
+              </Route>
+              <Route path="/plants">
+                <CreatePlant />
+              </Route>
+              <Route path="/harvest">
+                <Harvest />
+              </Route>
+              <Route path="/sow/new">
+                <CreateSow />
+              </Route>
+            </Switch>
+          </div>
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+
+  return (
     <div className="App">
       <div>
         <div className="flex h-screen bg-gray-200">
-          <div className="block fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
           <BrowserRouter>
-            <Sidebar />
+            <Sidebar show={show} />
             <div className="flex-1 flex flex-col overflow-hidden">
-              <Header />
+              <Header show={show} />
               <Switch>
                 <Route path="/dashboard">
                   <Dashboard />

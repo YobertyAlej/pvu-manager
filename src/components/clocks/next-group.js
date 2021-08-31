@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { PVU_AUTH_TOKEN } from '../../constants.js';
+import TurnChecker from './turn-checker.js';
 
 const NextGroup = () => {
   const [utc, setUtc] = useState(moment.utc());
@@ -55,49 +56,33 @@ const NextGroup = () => {
 
   if (!group) {
     return (
-      <span className="text-white relative float-right mt-1 mr-10">
-        Cargando data
-      </span>
+      <span className="text-white relative  mt-1 mr-10">Cargando data</span>
     );
   }
 
   return (
-    <>
-      {group.currentGroup == group.inGroup && (
-        <a
-          href="https://marketplace.plantvsundead.com/farm#/farm"
-          target="_tab"
-        >
-          <span className="cursor-pointer w-10 relative float-right mr-3">
-            <i className="fas fa-users p-2 bg-green-500 rounded-full text-white"></i>
-          </span>
-        </a>
-      )}
-      {group.currentGroup != group.inGroup && (
-        <a
-          href="https://marketplace.plantvsundead.com/farm#/farm"
-          target="_tab"
-        >
-          <span className="cursor-pointer w-10 relative float-right mr-3">
-            <i className="fas fa-users p-2 bg-red-500 rounded-full text-white"></i>
-          </span>
-        </a>
-      )}
-      <span className="text-white w-30 relative float-right mr-5  pl-5">
-        <i className="fas fa-check mr-2"></i>
-        <span className="text-gray-500">Current Group: </span>{' '}
-        {group.currentGroup}
-      </span>
-      <span className="text-white w-30 relative float-right pl-5 pr-5 border-r">
+    <div>
+      <span className="hidden md:inline-block text-white pr-5 mr-5 border-r">
         <i className="fas fa-user mr-2"></i>
-        <span className="text-gray-500">Your group: </span> {group.inGroup}
+        <span className="text-gray-500 hidden lg:inline-block mr-1">
+          Your group:
+        </span>
+        {group.inGroup}
       </span>
-      <span className="text-white relative float-right pr-5 border-r">
+      <span className="lg:inline-block text-white pr-5 mr-5 border-r">
         <i className="fas fa-clock mr-2"></i>
-        <span className="text-gray-500">Next group: </span>
+        <span className="text-gray-500 hidden lg:inline-block mr-1">Turn:</span>
         {getNextGroupTime()}
       </span>
-    </>
+      <span className="hidden md:inline-block text-white pr-5 mr-5 border-r">
+        <i className="fas fa-check mr-2"></i>
+        <span className="text-gray-500 hidden lg:inline-block mr-1">
+          Current Group:
+        </span>
+        {group.currentGroup}
+      </span>
+      <TurnChecker group={group} />
+    </div>
   );
 };
 
