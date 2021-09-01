@@ -1,0 +1,26 @@
+{
+    "elements": {
+        "fire": 0,
+        "water": 0,
+        "ice": 0,
+        "wind": 0,
+        "electro": 1,
+        "parasite": 0,
+        "light": 0,
+        "dark": 0,
+        "metal": 1
+    },
+    "capacity": {
+        "plant": 25,
+        "motherTree": 4
+    },
+    "isDefaultLand": false,
+    "_id": "60fbe444eff5c477c26cf81d",
+    "landId": 10444,
+    "x": 2,
+    "y": 3,
+    "totalOfElements": 2,
+    "rarity": 1,
+    "__v": 0,
+    "ownerId": ""
+}

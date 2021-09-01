@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FilePicker from '../../components/fileuploaders/file-picker';
+import FilePicker from '../../components/fileuploaders/file-picker.js';
 import useToken from '../../hooks/useToken.js';
 
 const Create = () => {

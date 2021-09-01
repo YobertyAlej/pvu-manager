@@ -4,17 +4,32 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 const HarvestPlant = ({ sow }) => {
-  const [harvest, setHarvest] = useState(false);
+  const [harvest, setHarvest] = useState(sow.harvestTime);
+  const [paused, setPaused] = useState();
+
   const getPlantName = () => sow.plant.name;
-  const getPlantIcon = () => sow.plant.image;
+  const getPlantIcon = () => sow.plant.iconUrl;
+
+  const tick = () => {
+    const harvest = moment(sow.harvestTime).fromNow();
+    if (sow.pausedTime) {
+      const paused = moment(sow.pausedTime).fromNow();
+      setPaused(paused);
+    }
+    setHarvest(harvest);
+  };
+
+  const payload_apply_tool_water = {
+    farmId: '612f052cb7e229000967afba',
+    toolId: 1,
+    token: { challenge: 'default', seccode: 'default', validate: 'default' },
+  };
 
   useEffect(() => {
-    const today = moment();
-    const harvest_time = moment(sow.created_at).add(72, 'hours');
-
-    if (harvest_time.diff(today) < 0) {
-      setHarvest(true);
-    }
+    const interval = setInterval(() => {
+      tick();
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -36,39 +51,20 @@ const HarvestPlant = ({ sow }) => {
           </div>
         </div>
       </td>
-
       <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-        <span className="text-sm ">
-          {moment(sow.created_at)
-            .add(sow.plant.time_in_hours, 'hours')
-            .format('LLL')}
-        </span>
+        {harvest}
       </td>
-
       <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-        <Countdown
-          daysInHours={true}
-          date={moment(sow.created_at)
-            .add(sow.plant.time_in_hours, 'hours')
-            .toString()}
-          onComplete={() => setHarvest(true)}
-        />
+        {paused}
+        {!paused && 'Clean'}
       </td>
-      <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
-        <a href={sow.url} className="text-indigo-600 hover:text-indigo-900">
-          Open in PVU
-        </a>
-      </td>
-      <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
-        <button
-          className={
-            harvest
-              ? 'font-bold rounded border-b-2 border-green-600 bg-green-500 text-white shadow-md py-2 px-4 inline-flex items-center'
-              : 'cursor-not-allowed font-bold rounded border-b-2 border-green-600 bg-gray-500 text-white shadow-md py-2 px-4 inline-flex items-center'
-          }
-        >
-          <span className="mr-2">Harvest</span>
-        </button>
+      <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+        {sow.needWater && (
+          <span className="fas fa-water p-2 rounded-full text-yellow-800 bg-yellow-500"></span>
+        )}
+        {!sow.needWater && (
+          <span className="fas fa-water p-2 rounded-full text-blue-800 bg-blue-400"></span>
+        )}
       </td>
     </tr>
   );

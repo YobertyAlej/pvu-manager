@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import HarvestPlant from '../components/harvest-plant.js';
-import { NavLink } from 'react-router-dom';
-import useToken from '../hooks/useToken.js';
+import moment from 'moment';
+import { PVU_AUTH_TOKEN } from '../constants.js';
 
 const Harvest = () => {
-  const [errors, setErrors] = useState();
-  const [sows, setSows] = useState([]);
-  const [page, setPage] = useState(1);
-
-  const { token } = useToken();
+  const [errors, setErrors] = useState([]);
+  const [status, setStatus] = useState(false);
+  const [farms, setFarms] = useState([]);
 
   const getData = async () => {
-    return fetch('http://pvu-api.test/api/sows?page=' + page, {
+    return fetch('https://backend-farm-stg.plantvsundead.com/farms', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + PVU_AUTH_TOKEN,
       },
     });
   };
@@ -25,7 +23,7 @@ const Harvest = () => {
     getData()
       .then((data) => handleSuccess(data))
       .catch((error) => handleErrors(error));
-  }, [page]);
+  }, [errors]);
 
   const handleSuccess = async (data) => {
     if (!data.ok) {
@@ -33,23 +31,17 @@ const Harvest = () => {
       return;
     }
     const parsed = await data.json();
-    setSows(parsed);
+    if (parsed.status == 444) {
+      setStatus(false);
+      return;
+    }
+    setStatus(true);
+    setFarms(parsed);
   };
   const handleErrors = async (data) => {
-    console.log('error', data);
-    setErrors(data);
-  };
-
-  const nextPage = async () => {
-    if (page < sows.last_page) {
-      setPage(page + 1);
-    }
-  };
-
-  const previousPage = async () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
+    console.log('error from farm', data);
+    console.log('errors', errors);
+    setErrors([...errors, { time: moment(), data }]);
   };
 
   return (
@@ -57,92 +49,62 @@ const Harvest = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="flex justify-between">
           <h3 className="text-gray-700 text-3xl font-medium">Harvest</h3>
-          <NavLink
-            to="/sow/new"
-            className="flex items-center py-2 px-6 bg-opacity-25 text-gray-100"
-            activeClassName="flex items-center py-2 px-6 bg-gray-700 bg-opacity-25 text-gray-100"
-          >
-            <button className="bg-white text-gray-800 font-bold rounded border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-4 inline-flex items-center">
-              <span className="mr-2">Add plant</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentcolor"
-                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"
-                />
-              </svg>
-            </button>
-          </NavLink>
         </div>
 
-        <div className="flex flex-col mt-8">
-          <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-            <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-              <table className="min-w-full">
-                <thead>
-                  <tr>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Datetime to harvest
-                    </th>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Remaining time
-                    </th>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Link
-                    </th>
-                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Harvest
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody className="bg-white">
-                  {sows.data &&
-                    sows.data.map((sow, index) => (
-                      <HarvestPlant sow={sow} key={sow.id} />
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="text-md flex justify-center mt-4">
-              Current page: {page}
-            </div>
-            <div className="text-md flex justify-center">
-              Total page: {sows.last_page}
-            </div>
-            <div className="flex items-center justify-center">
-              <ul className="flex pl-0 list-none rounded my-2">
-                <li
-                  onClick={previousPage}
-                  className={
-                    page == 1
-                      ? 'relative block py-2 px-3 leading-tight bg-white border border-gray-300 text-gray-700 border-r-0 ml-0 rounded-l'
-                      : 'relative block py-2 px-3 leading-tight bg-white border border-gray-300 text-blue-700 border-r-0 ml-0 rounded-l hover:bg-gray-200 cursor-pointer'
-                  }
+        {!status && (
+          <div
+            className="mt-40 mx-auto w-max bg-yellow-100 border-t-4 border-yellow-500 rounded-b text-yellow-900 px-4 py-3 shadow-md"
+            role="alert"
+          >
+            <div className="flex">
+              <div className="py-1">
+                <svg
+                  className="fill-current h-6 w-6 text-teal-500 mr-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
                 >
-                  <a className="page-link">Previous</a>
-                </li>
-                <li
-                  onClick={nextPage}
-                  className={
-                    page == sows.last_page
-                      ? 'relative block py-2 px-3 leading-tight bg-white border border-gray-300 text-gray-700 border-r-0 ml-0 rounded-l'
-                      : 'relative block py-2 px-3 leading-tight bg-white border border-gray-300 text-blue-700 border-r-0 ml-0 rounded-l hover:bg-gray-200 cursor-pointer'
-                  }
-                >
-                  <a className="page-link">Next</a>
-                </li>
-              </ul>
+                  <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-bold">Not your turn to farm</p>
+                <p className="text-sm">Wait until your next turn</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+        {farms.data && (
+          <div className="flex flex-col mt-8">
+            <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+              <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                <table className="min-w-full">
+                  <thead>
+                    <tr>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Icon
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Remaining time
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Paused time
+                      </th>
+                      <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Water
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="bg-white">
+                    {farms.data.map((sow, index) => (
+                      <HarvestPlant sow={sow} key={sow._id} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
