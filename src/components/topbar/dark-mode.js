@@ -1,6 +1,4 @@
 import React from 'react';
-import NextGroup from '../clocks/next-group.js';
-import UTCClock from '../clocks/utc-clock';
 
 const DarkMode = () => {
   return (
@@ -14,11 +12,7 @@ const DarkMode = () => {
           />
           <span className="hidden md:inline-block text-center text-white">
             <i className="w-8 fas fa-clock p-2 bg-gray-800 rounded-full mr-2"></i>
-            <UTCClock />
           </span>
-        </div>
-        <div>
-          <NextGroup />
         </div>
       </div>
 
@@ -33,20 +27,10 @@ const DarkMode = () => {
           </span>
           <span className="hidden md:inline-block text-center text-white">
             <i className="w-8 fas fa-clock p-2 bg-gray-800 rounded-full mr-2"></i>
-            <UTCClock />
           </span>
           <span className="text-center hidden md:inline-block lg:hidden text-white border-l border-gray-700 ml-5 pl-5">
             PVU Manager
           </span>
-          {false && (
-            <span className="px-1 text-white cursor-pointer w-8 relative float-right mr-5">
-              <i className="w-8 fas fa-bell p-2 bg-gray-800 rounded-full"></i>
-              <span className="absolute right-0 top-0 -mt-2 -mr-1 text-xs bg-red-500 text-white font-medium px-1 shadow-lg rounded-full">
-                3
-              </span>
-            </span>
-          )}
-          <NextGroup />
         </div>
       )}
     </div>

@@ -1,2 +1,6 @@
-export const PVU_AUTH_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNBZGRyZXNzIjoiMHg2ODQxYTg3NmZlMjQ2ZjdhZjUwMTRlNzZiYjJmOTBjNjdmYjQzNWFkIiwibG9naW5UaW1lIjoxNjMwMzUwMzYzMzM5LCJjcmVhdGVEYXRlIjoiMjAyMS0wOC0yMSAwMzo0OToyMSIsImlhdCI6MTYzMDM1MDM2M30.GKEBeiCGBSzQZNfAD2wbsq4ATefwgP0JSSInOuloil4';
+export const PVU_AUTH_TOKEN = '';
+export const ENDPOINT_MARKETPLACE_LATEST_PUBLISHED =
+  'https://backend-farm.plantvsundead.com/get-plants-filter-v2?offset=0&limit=40&sort=latest&type=1';
+export const PLANTS_TO_NOT_SHOW = [];
+
+export const PLANT_TYPES_NOT_TO_SHOW = ['light', 'metal', 'parasite', 'dark'];
