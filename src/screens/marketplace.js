@@ -65,7 +65,8 @@ const Marketplace = () => {
       return;
     }
 
-    const filtered = filterByType(parsed.data);
+    // const filtered = filterByType(parsed.data);
+    const filtered = parsed.data;
     setPlants(filtered);
     setLoading(false);
   };
